@@ -6,8 +6,9 @@ function App() {
 
   const [item, setItem] = useState("");
   const [cost, setCost] = useState("");
+  const [costs, setCosts] = useState(0);
   const [budget, setBudget] = useState("");
-  const [budgets, setBudgets] = useState([]);
+  const [budgets, setBudgets] = useState("");
   const [history, setHistory] = useState([]);
 
   const addItem = () => {
@@ -17,7 +18,10 @@ function App() {
     }
 
     setHistory(oldHist => [...oldHist, product])
-    console.log(history);
+    console.log("history", history);
+
+    setCosts(prevState => prevState + Math.floor(product.value[1]));
+    console.log("Costs", costs);
 
     setItem("");
     setCost("");
@@ -27,20 +31,21 @@ function App() {
     const budgetPrint = {
       value:budget
     }
-    setBudgets(oldHistory => [...oldHistory, budgetPrint]);
-    console.log(budgets);
+    setBudgets(budgetPrint);
+    console.log("Budget", budgets);
     setBudget("");
+  }
+  
+  const clear = () => {
+    setBudgets("");
+    setHistory([]);
   }
 
   return (
-    <div className="App">
-
-      <h1>Budget : </h1>
-      {budgets.map(budget => {
-        return<h1>
-          {budget.value}
-        </h1>
-      })}
+    <div className="center">
+      <h1 class="title">Expense Tracker Application</h1>
+      <hr/>
+      <h2>Budget : {budgets.value}</h2>
 
       
       <input
@@ -54,9 +59,10 @@ function App() {
       <button onClick={addBudget}>Submit</button>
 
       <br/>
-      <button>Clear</button>
+      <button onClick={clear}>Clear</button>
 
-      <h1>Remaining : </h1>
+      <h2>Remaining : {budgets.value - costs}</h2>
+      
 
       <input
         type="text"
@@ -77,20 +83,24 @@ function App() {
       <br/>
 
       <button onClick={addItem} type="submit">Submit</button>
+      
 
       <h1>History</h1>
-      <table>
-        <tr>
-          <th>Item</th>
-          <th>Cost</th>
-        </tr>
-
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
         {history.map(hist => {
           return<tr key={hist.id}>
             <td>{hist.value[0]}</td>
             <td>{hist.value[1]}</td>
           </tr>
         })}
+        </tbody>
       </table>
 
       
